@@ -169,6 +169,11 @@ class VirtualCANBus:
         self.is_active = True
 
     def send(self, frame: CANFrame) -> bool:
+        """
+        Transmits a frame across the virtual bus.
+        Evaluates bus active status, applies filter matching, and pushes to buffer.
+        Returns True if accepted and buffered, False otherwise.
+        """
         if not self.is_active:
             return False
         if self.filter.matches(frame.arbitration_id):
@@ -176,6 +181,9 @@ class VirtualCANBus:
         return False
 
     def recv(self, timeout: float = 0.05) -> Optional[CANFrame]:
+        """Pulls the next available frame from the bus RX buffer with timeout."""
+        if not self.is_active:
+            return None
         return self.buffer.pop(timeout=timeout)
 
     def shutdown(self):
