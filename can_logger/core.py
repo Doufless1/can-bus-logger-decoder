@@ -87,9 +87,15 @@ class CANFilter:
 class RingBuffer:
     """
     Bounded, thread-safe FIFO between the code that receives frames and the code
-    that processes them (built on queue.Queue, so it uses a lock internally).
-    When it is full the newest frame is dropped and counted, so a slow consumer
-    shows up as a number instead of silently losing data.
+    that processes them.
+
+    Architecture:
+    - Decouples high-frequency I/O ingestion from variable-latency downstream decoding.
+    - Built on queue.Queue, utilizing an internal mutex lock and condition variables
+      (not_empty, not_full) to guarantee race-free thread synchronization.
+    - Implements backpressure protection: When capacity is reached, newest inbound frames
+      are discarded and tracked via dropped_frames counter rather than blocking the bus
+      or consuming unbounded host RAM.
     """
     def __init__(self, capacity: int = 50000):
         self.capacity = capacity
