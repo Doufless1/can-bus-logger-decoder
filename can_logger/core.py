@@ -36,6 +36,11 @@ class CANFrame:
 
     @property
     def hex_id(self) -> str:
+        """
+        Returns canonical hex string representation padded according to frame format.
+        - Standard 11-bit IDs range 0x000 - 0x7FF (padded to 3 hex nibbles).
+        - Extended 29-bit IDs range 0x00000000 - 0x1FFFFFFF (padded to 8 hex nibbles).
+        """
         return f"0x{self.arbitration_id:03X}" if not self.is_extended else f"0x{self.arbitration_id:08X}"
 
     @property
