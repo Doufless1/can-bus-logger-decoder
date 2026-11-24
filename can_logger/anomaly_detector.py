@@ -83,7 +83,7 @@ class AnomalyDetector:
             for idx in anomaly_indices:
                 row = subset.loc[idx]
                 ts = df.loc[idx, "timestamp"] if "timestamp" in df.columns else idx
-                values_summary = ", ".join([f"{col}={row[col]}" for col in available_cols])
+                values_summary = ", ".join([f"{col}={row[col]:.1f}" for col in available_cols])
                 alerts.append({
                     "type": "ISOLATION_FOREST_MULTIVARIATE",
                     "timestamp": ts,
