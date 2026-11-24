@@ -1,6 +1,10 @@
 """
 Core CAN protocol abstractions, hardware-style acceptance filtering, and ring buffer.
 
+Functional Safety (ISO 26262) Considerations:
+- Deterministic frame timing and bounded queue latency prevent stale sensor states.
+- Explicit drop accounting enables early detection of bus overload and ECU faults.
+
 Automotive CAN (Controller Area Network) Architecture Overview:
 - Implements ISO 11898-1 standard data link and physical layer principles.
 - Operates with differential signaling (CAN_H and CAN_L) where logical 0 is
