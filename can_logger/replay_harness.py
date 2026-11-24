@@ -1,5 +1,7 @@
 """
-Trace Replay Test Harness: Replays recorded CAN traces with microsecond precision.
+Trace replay harness: loads a recorded CAN trace from CSV and replays it into a
+bus, keeping the relative timing between frames (sleep-based, so the timing is
+approximate, and each gap is capped at 50 ms).
 """
 
 import time
@@ -13,7 +15,9 @@ class TraceReplayHarness:
 
     def load_frames(self) -> List[CANFrame]:
         """Loads and parses raw CAN frames from CSV."""
-        df = pd.read_csv(self.trace_path)
+        # Keep these two columns as text: a payload like 0000000000000000 would
+        # otherwise be read as the number 0 and lose its leading zeros.
+        df = pd.read_csv(self.trace_path, dtype={"arbitration_id": str, "data_hex": str})
         frames = []
         for _, row in df.iterrows():
             arb_id = int(str(row["arbitration_id"]), 16) if str(row["arbitration_id"]).startswith("0x") else int(row["arbitration_id"])
@@ -44,9 +48,8 @@ class TraceReplayHarness:
                 time.sleep(min(delta, 0.05))  # Sleep up to delta, capped for test runs
             prev_ts = frame.timestamp
 
-            # Optional synthetic fault injection
+            # Optional fault injection: one frame in the middle gets an all-0xFF payload
             if inject_fault and i == len(frames) // 2:
-                # Corrupt payload
                 corrupt_frame = CANFrame(
                     timestamp=frame.timestamp,
                     arbitration_id=frame.arbitration_id,

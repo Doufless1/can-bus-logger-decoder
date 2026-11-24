@@ -112,5 +112,4 @@ class DBCDecoder:
             return pd.DataFrame()
 
         df = pd.DataFrame(decoded_records)
-        df.sort_values(by="timestamp", inplace=True)
-        return df
+        return df.sort_values(by="timestamp")

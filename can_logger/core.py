@@ -44,8 +44,10 @@ class CANFilter:
 
 class RingBuffer:
     """
-    High-throughput, thread-safe circular buffer for raw CAN frame streaming.
-    Tracks dropped frames on buffer overflow.
+    Bounded, thread-safe FIFO between the code that receives frames and the code
+    that processes them (built on queue.Queue, so it uses a lock internally).
+    When it is full the newest frame is dropped and counted, so a slow consumer
+    shows up as a number instead of silently losing data.
     """
     def __init__(self, capacity: int = 50000):
         self.capacity = capacity
@@ -74,15 +76,25 @@ class RingBuffer:
     def size(self) -> int:
         return self.queue.qsize()
 
+    def stats(self) -> dict:
+        return {
+            "total_received": self.total_received,
+            "dropped_frames": self.dropped_frames,
+            "queued": self.queue.qsize(),
+        }
+
 
 class VirtualCANBus:
     """
-    Simulates a high-speed virtual CAN interface (SocketCAN vcan0 emulator).
+    A pure-Python stand-in for a CAN bus: frames sent to it pass the acceptance
+    filter and land in a RingBuffer. It does not talk to SocketCAN; for a real
+    or virtual python-can interface see python_can_adapter.py.
     """
-    def __init__(self, channel: str = "vcan0", filter_engine: Optional[CANFilter] = None):
+    def __init__(self, channel: str = "vcan0", filter_engine: Optional[CANFilter] = None,
+                 buffer_capacity: int = 50000):
         self.channel = channel
         self.filter = filter_engine or CANFilter()
-        self.buffer = RingBuffer()
+        self.buffer = RingBuffer(capacity=buffer_capacity)
         self.is_active = True
 
     def send(self, frame: CANFrame) -> bool:
