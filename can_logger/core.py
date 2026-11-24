@@ -16,6 +16,18 @@ from typing import Optional, List, Set
 
 @dataclass
 class CANFrame:
+    """
+    Represents an atomic physical layer CAN 2.0A/B data frame.
+
+    Fields:
+      timestamp: Floating-point monotonic or epoch time (seconds) recorded upon
+                 reception by the transceiver/interface driver.
+      arbitration_id: Message identifier (11-bit for standard CAN 2.0A; 29-bit for
+                      extended CAN 2.0B / SAE J1939 protocols).
+      is_extended: Boolean flag indicating IDE (Identifier Extension) bit state.
+      dlc: Data Length Code specifying byte count in payload (0 to 8 bytes for classic CAN).
+      data: Immutable raw bytes payload transmitted on the bus.
+    """
     timestamp: float
     arbitration_id: int
     is_extended: bool
