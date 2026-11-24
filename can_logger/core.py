@@ -1,5 +1,12 @@
 """
 Core CAN protocol abstractions, hardware-style acceptance filtering, and ring buffer.
+
+Automotive CAN (Controller Area Network) Architecture Overview:
+- Implements ISO 11898-1 standard data link and physical layer principles.
+- Operates with differential signaling (CAN_H and CAN_L) where logical 0 is
+  dominant (differential voltage ~2.0V) and logical 1 is recessive (0.0V).
+- Message priority is resolved non-destructively through bitwise arbitration
+  over the arbitration ID field during frame transmission.
 """
 
 import time
