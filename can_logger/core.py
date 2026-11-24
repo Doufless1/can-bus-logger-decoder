@@ -45,6 +45,7 @@ class CANFrame:
 
     @property
     def hex_data(self) -> str:
+        """Returns uppercase hexadecimal string representation of the raw payload bytes."""
         return self.data.hex().upper()
 
 
