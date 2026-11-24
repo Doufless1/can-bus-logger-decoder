@@ -104,6 +104,14 @@ class RingBuffer:
         self.total_received: int = 0
 
     def push(self, frame: CANFrame) -> bool:
+        """
+        Non-blocking enqueue of an incoming frame.
+
+        Accounting semantics:
+        - Increments total_received counter unconditionally.
+        - Attempts put_nowait(); if the queue has reached maxsize, catches queue.Full,
+          increments dropped_frames, and returns False without raising an exception.
+        """
         self.total_received += 1
         try:
             self.queue.put_nowait(frame)
