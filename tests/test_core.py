@@ -6,6 +6,11 @@ def make_frame(i: int) -> CANFrame:
 
 
 def test_ring_buffer_stats_report_drops_when_full():
+    """
+    Verifies that when RingBuffer exceeds its configured maxsize capacity:
+    1. The overflowing frame is dropped rather than blocking or expanding memory.
+    2. stats() accurately accounts for total received vs dropped frames.
+    """
     rb = RingBuffer(capacity=2)
 
     results = [rb.push(make_frame(i)) for i in range(3)]
