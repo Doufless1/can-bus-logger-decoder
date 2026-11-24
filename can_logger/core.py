@@ -153,9 +153,13 @@ class RingBuffer:
 
 class VirtualCANBus:
     """
-    A pure-Python stand-in for a CAN bus: frames sent to it pass the acceptance
-    filter and land in a RingBuffer. It does not talk to SocketCAN; for a real
-    or virtual python-can interface see python_can_adapter.py.
+    A pure-Python stand-in for a CAN bus transceiver and channel.
+
+    Provides a mock physical communication channel:
+    - Frames sent to it pass through the acceptance filter engine before enqueueing.
+    - Enqueues accepted traffic into a dedicated internal RingBuffer.
+    - Isolated from OS networking (does not require root/SocketCAN privileges),
+      making it ideal for unit testing, reproducible replay, and offline analytics.
     """
     def __init__(self, channel: str = "vcan0", filter_engine: Optional[CANFilter] = None,
                  buffer_capacity: int = 50000):
