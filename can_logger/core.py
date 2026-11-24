@@ -121,6 +121,13 @@ class RingBuffer:
             return False
 
     def pop(self, timeout: Optional[float] = 0.05) -> Optional[CANFrame]:
+        """
+        Dequeues the next frame with a bounded timeout.
+
+        A short timeout (default 50ms) prevents downstream consumer worker threads from
+        busy-waiting or hanging indefinitely when the bus is quiet, allowing clean
+        interruption during system shutdown.
+        """
         try:
             return self.queue.get(timeout=timeout)
         except queue.Empty:
