@@ -140,6 +140,10 @@ class RingBuffer:
         return self.queue.qsize()
 
     def stats(self) -> dict:
+        """
+        Returns point-in-time telemetry snapshot of queue performance metrics.
+        Useful for health monitoring, packet drop alarms, and buffer sizing diagnostics.
+        """
         return {
             "total_received": self.total_received,
             "dropped_frames": self.dropped_frames,
