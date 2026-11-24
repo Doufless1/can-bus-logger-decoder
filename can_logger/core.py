@@ -66,6 +66,17 @@ class CANFilter:
         self.code = code
 
     def matches(self, arbitration_id: int) -> bool:
+        """
+        Evaluates whether an arbitration ID passes the configured acceptance filter.
+
+        Evaluation logic:
+        1. Explicit whitelist check: If allowed_ids set is provided, performs O(1) set membership.
+        2. Pass-through default: If mask is 0x000, all bits are "don't care", returning True.
+        3. Bitwise mask/code evaluation:
+           (arbitration_id & mask) == (code & mask)
+           - Mask bit = 1: The bit must match the corresponding bit in code.
+           - Mask bit = 0: The bit is ignored (wildcard).
+        """
         if self.allowed_ids is not None:
             return arbitration_id in self.allowed_ids
         if self.mask == 0:
