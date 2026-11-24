@@ -52,6 +52,12 @@ class CANFrame:
 class CANFilter:
     """
     Hardware-style mask and acceptance filter for arbitration IDs.
+
+    Emulates hardware acceptance filtering built into standalone CAN controllers
+    (such as Microchip MCP2515 or NXP SJA1000). Hardware filtering discards
+    unwanted bus traffic directly at the silicon level, preventing CPU interrupt
+    flooding and freeing host processing budget for relevant telemetry.
+
     By default (mask=0), all frames are accepted.
     """
     def __init__(self, allowed_ids: Optional[Set[int]] = None, mask: int = 0x000, code: int = 0x000):
