@@ -20,6 +20,10 @@ def test_ring_buffer_stats_report_drops_when_full():
 
 
 def test_virtual_bus_buffer_capacity_is_configurable():
+    """
+    Verifies that VirtualCANBus correctly propagates custom capacity bounds
+    down to its internal RingBuffer instance.
+    """
     bus = VirtualCANBus(buffer_capacity=3)
 
     for i in range(5):
