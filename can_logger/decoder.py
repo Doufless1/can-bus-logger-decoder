@@ -60,6 +60,7 @@ class DBCDecoder:
                     **signals
                 }
             except KeyError:
+                # Frame ID not registered in loaded DBC database
                 return None
 
         # Standalone deterministic decoder for standard Powertrain DBC specification
