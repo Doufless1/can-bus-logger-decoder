@@ -67,7 +67,10 @@ class DBCDecoder:
         # where the least significant byte is stored at the lowest memory address.
         raw = frame.data
         if frame.arbitration_id == 0x100 and len(raw) >= 4:
-            # EngineData: Speed (16b, factor 0.25), Throttle (8b, factor 0.392), Load (8b, factor 0.392)
+            # EngineData (0x100):
+            # - EngineSpeed (bytes 0-1, 16-bit uint, scale 0.25 rpm/bit, range 0-16383.75 rpm)
+            # - ThrottlePosition (byte 2, 8-bit uint, scale 0.392 %/bit, range 0-100%)
+            # - EngineLoad (byte 3, 8-bit uint, scale 0.392 %/bit, range 0-100%)
             raw_rpm = int.from_bytes(raw[0:2], byteorder="little")
             rpm = round(raw_rpm * 0.25, 2)
             throttle = round(raw[2] * 0.392, 2)
