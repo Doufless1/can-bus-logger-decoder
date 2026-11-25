@@ -45,6 +45,11 @@ def test_dbc_decoder_engine_data():
     assert decoded["EngineLoad"] == 18.82
 
 def test_dbc_decoder_thermal_status():
+    """
+    Verifies offset subtraction for 0x300 ThermalStatus:
+    - Byte 0 (0x82 = 130) - 40 = 90 deg C Coolant
+    - Byte 1 (0x8C = 140) - 40 = 100 deg C Oil
+    """
     decoder = DBCDecoder()
     # Coolant byte 0 = 0x82 (130 dec). 130 - 40 = 90 °C
     # Oil byte 1 = 0x8C (140 dec). 140 - 40 = 100 °C
