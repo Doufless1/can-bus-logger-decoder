@@ -1,5 +1,12 @@
 """
 DBC-driven CAN signal decoding and physical value reconstruction.
+
+Vector DBC Specification Overview:
+- DBC (Database CAN) files define the layout, scaling, offsets, and physical
+  units of raw binary payloads transmitted across CAN arbitration IDs.
+- Syntax:
+  * BO_ <ID> <MessageName>: <DLC> <TransmitterNode>
+  * SG_ <SignalName> : <StartBit>|<Length>@<Endianness><Sign> (<Factor>,<Offset>) [<Min>|<Max>] "<Unit>" <ReceiverNodes>
 """
 
 import struct
