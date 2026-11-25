@@ -8,6 +8,7 @@ from can_logger.core import CANFrame, CANFilter, RingBuffer
 from can_logger.decoder import DBCDecoder
 
 def test_ring_buffer_push_pop():
+    """Verifies FIFO order, size reporting, and non-destructive pop operations."""
     rb = RingBuffer(capacity=10)
     frame = CANFrame(timestamp=1.0, arbitration_id=0x100, is_extended=False, dlc=8, data=b"\x00"*8)
     assert rb.push(frame) is True
