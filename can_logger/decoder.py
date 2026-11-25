@@ -131,6 +131,12 @@ class DBCDecoder:
     def frames_to_timeseries(self, frames: list[CANFrame]) -> pd.DataFrame:
         """
         Decodes a sequence of raw frames into a unified chronological time-series DataFrame.
+
+        Processing Steps:
+        1. Iterate sequentially through raw captured frames.
+        2. Attempt DBC decoding for each frame; skip non-matching / unconfigured IDs.
+        3. Aggregate decoded signal dicts into a structured Pandas DataFrame.
+        4. Sort records by float timestamp to guarantee monotonic chronological alignment.
         """
         decoded_records = []
         for f in frames:
