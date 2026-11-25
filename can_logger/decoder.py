@@ -63,6 +63,8 @@ class DBCDecoder:
                 return None
 
         # Standalone deterministic decoder for standard Powertrain DBC specification
+        # Endianness: Little-endian (Intel) is used across powertrain telemetry signals,
+        # where the least significant byte is stored at the lowest memory address.
         raw = frame.data
         if frame.arbitration_id == 0x100 and len(raw) >= 4:
             # EngineData: Speed (16b, factor 0.25), Throttle (8b, factor 0.392), Load (8b, factor 0.392)
