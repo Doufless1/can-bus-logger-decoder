@@ -23,7 +23,12 @@ except ImportError:
 class DBCDecoder:
     """
     Decodes raw byte payloads into physical engineering units using Vector DBC specs.
-    Provides graceful standalone parsing fallback if cantools is not yet installed.
+
+    Dual-Engine Design:
+    1. Primary Engine: High-performance cantools database parser, capable of dynamic
+       signal decoding, multiplexed signals, and complex DBC definitions.
+    2. Standalone Fallback Engine: Deterministic, pure-Python bitwise decoder supporting
+       core powertrain telemetry without external binary dependencies.
     """
     def __init__(self, dbc_path: Optional[str] = None):
         self.dbc_path = dbc_path
