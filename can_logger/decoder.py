@@ -42,6 +42,11 @@ class DBCDecoder:
     def decode_frame(self, frame: CANFrame) -> Optional[Dict[str, Any]]:
         """
         Extracts named physical signals from a CANFrame.
+
+        Signal Scaling Formula:
+            physical_value = raw_integer * factor + offset
+
+        Units and ranges adhere to SAE J1939 / ISO standard automotive conventions.
         """
         # If cantools database is loaded, use it
         if self.db:
