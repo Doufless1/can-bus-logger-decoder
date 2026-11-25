@@ -18,6 +18,7 @@ def test_ring_buffer_push_pop():
     assert rb.size() == 0
 
 def test_can_filter_acceptance():
+    """Verifies that CANFilter accepts whitelisted IDs and blocks non-matching IDs."""
     can_filter = CANFilter(allowed_ids={0x100, 0x200})
     assert can_filter.matches(0x100) is True
     assert can_filter.matches(0x200) is True
