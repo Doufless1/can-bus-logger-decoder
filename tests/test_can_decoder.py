@@ -24,6 +24,12 @@ def test_can_filter_acceptance():
     assert can_filter.matches(0x300) is False
 
 def test_dbc_decoder_engine_data():
+    """
+    Verifies bitwise arithmetic for 0x100 EngineData:
+    - Byte 0-1 (0x1964 = 6500) * 0.25 = 1625.0 RPM
+    - Byte 2 (0x28 = 40) * 0.392 = 15.68% Throttle
+    - Byte 3 (0x30 = 48) * 0.392 = 18.82% Load
+    """
     decoder = DBCDecoder()
     # 0x1964 = 6500 in hex (little-endian: 64 19). 6500 * 0.25 = 1625.0 RPM
     # Throttle byte 2 = 0x28 (40 dec). 40 * 0.392 = 15.68 %
