@@ -112,7 +112,10 @@ class DBCDecoder:
                 "IntakeAirTempC": intake
             }
         elif frame.arbitration_id == 0x400 and len(raw) >= 2:
-            # BrakeStatus: Applied (1b), Pressure (15b, factor 0.1)
+            # BrakeStatus (0x400) Bitfield Unpacking:
+            # - BrakePedalApplied: Bit 0 (1-bit flag: 0 = Released, 1 = Pressed)
+            # - BrakePressureBar: Bits 1-15 (15-bit uint, scale 0.1 bar/bit, range 0-3276.7 bar)
+            # Shift raw integer right by 1 to isolate pressure bits after checking bit 0.
             raw_val = int.from_bytes(raw[0:2], byteorder="little")
             applied = raw_val & 0x01
             pressure = round((raw_val >> 1) * 0.1, 2)
