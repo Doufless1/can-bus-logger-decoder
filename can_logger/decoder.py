@@ -96,7 +96,10 @@ class DBCDecoder:
                 "VehicleSpeedKmh": speed
             }
         elif frame.arbitration_id == 0x300 and len(raw) >= 3:
-            # ThermalStatus: Coolant (8b, offset -40), Oil (8b, offset -40), Intake (8b, offset -40)
+            # ThermalStatus (0x300):
+            # Automotive temperature sensors use an offset of -40 deg C to allow
+            # representing sub-zero freezing temperatures with unsigned 8-bit bytes (0-255).
+            # Formula: temp_degC = raw_byte - 40 (Range: -40 deg C to +215 deg C)
             coolant = raw[0] - 40
             oil = raw[1] - 40
             intake = raw[2] - 40
