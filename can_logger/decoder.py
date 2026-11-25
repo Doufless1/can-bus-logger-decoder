@@ -1,6 +1,10 @@
 """
 DBC-driven CAN signal decoding and physical value reconstruction.
 
+Commercial Vehicle (SAE J1939) Context:
+- In heavy-duty truck architectures (e.g. DAF), parameter groups (PGNs) like
+  Electronic Engine Controller 1 (EEC1, PGN 61444) carry speed and torque demand.
+
 Vector DBC Specification Overview:
 - DBC (Database CAN) files define the layout, scaling, offsets, and physical
   units of raw binary payloads transmitted across CAN arbitration IDs.
