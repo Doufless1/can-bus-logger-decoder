@@ -84,7 +84,9 @@ class DBCDecoder:
                 "EngineLoad": load
             }
         elif frame.arbitration_id == 0x200 and len(raw) >= 2:
-            # VehicleSpeed: Speed (16b, factor 0.01)
+            # VehicleSpeed (0x200):
+            # - VehicleSpeedKmh (bytes 0-1, 16-bit uint, scale 0.01 km/h/bit, range 0-655.35 km/h)
+            # Transmitted periodically by the ABS / Wheel Speed sensor module.
             raw_spd = int.from_bytes(raw[0:2], byteorder="little")
             speed = round(raw_spd * 0.01, 2)
             return {
